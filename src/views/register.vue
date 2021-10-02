@@ -7,8 +7,15 @@
                 <v-row style="min-height:100vh" align-content="center" justify="center">
                     <v-col cols="8">
                         <v-col cols="12">
-                            <h2 class="mb-5">Login</h2>
+                            <h2 class="mb-5">Register</h2>
                             <v-text-field
+                                label="Name"
+                                v-model="name"
+                                type="name"
+                                solo
+                            ></v-text-field>
+                            <v-text-field
+                                style="margin-top:-12px !important"
                                 label="Email"
                                 v-model="email"
                                 solo
@@ -20,21 +27,21 @@
                                 type="password"
                                 solo
                             ></v-text-field>
+                            <v-text-field
+                                style="margin-top:-12px !important"
+                                label="Retype Password"
+                                v-model="retype_password"
+                                type="password"
+                                solo
+                            ></v-text-field>
                             <v-btn
                             elevation="5"
                             color="primary"
-                            @click="login"
+                            @click="register"
                             block
                             :loading="loading"
                             :disabled="loading"
-                            >Login</v-btn>
-                        </v-col>
-                        <v-col cols="12">
-                            <v-divider></v-divider>
-                            <v-btn
-                            class="mt-3"
                             >Register</v-btn>
-                            <a class="ma-5" href="https://google.com">Forgot Password ?</a>
                         </v-col>
                     </v-col>
                 </v-row>
@@ -47,23 +54,27 @@
 const axios = require('axios').default;
 
 export default {
-    'name':'Login',
+    'name':'Register',
     data() {
         return {
             loading:false,
             email:null,
-            password:null
+            password:null,
+            retype_password:null,
+            name:null
         }
     },
     methods:{
-        login: function(){
+        register: function(){
             this.loading = true;
-            axios.post(`${this.$store.state.backendURL}/api/auth/signin`,{
+            axios.post(`${this.$store.state.backendURL}/api/auth/register`,{
+                name:this.name,
                 email:this.email,
                 password:this.password
-            }).then((response) => {
-                this.$store.commit('snackbar',{open:true,text:`Welcome ${response.data.user.name}`,color:'green lighten-1'})
+            }).then(() => {
+                this.$store.commit('snackbar',{open:true,text:`Almost done ! check your email`,color:'green lighten-1'})
                 this.loading = false;
+                this.$router.push({ path: '/verify_user?email='+this.email})
             }).catch((error) => {
                 if (error.response){
                     this.$store.commit('snackbar',{open:true,text:error.response.data.message})
