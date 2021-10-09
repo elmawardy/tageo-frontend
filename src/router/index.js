@@ -3,6 +3,9 @@ import VueRouter from 'vue-router'
 import Login from '../views/login'
 import Register from '../views/register'
 import VerifyUser from '../views/VerifyUser'
+import Home from '../views/Home'
+import Main from '../views/layouts/Main'
+import MyGroups from '../views/MyGroups'
 
 Vue.use(VueRouter)
 
@@ -24,6 +27,15 @@ const routes = [
       alias:['/verify_user'],
       name: 'VerifyUser',
       component: VerifyUser
+    },
+    {
+      path: '/',
+      name: 'Main',
+      component: Main,
+      children: [
+        {path:'home',component: Home},
+        {path:'mygroups',component: MyGroups},
+      ]
     }
   ]
   
