@@ -1,9 +1,9 @@
 <template>
 <div>
-<v-card>
+<v-card class="mb-5">
     <v-card-text>
         <v-row>
-            <v-col cols="10">
+            <v-col @click="postdialog=!postdialog" cols="10" style="cursor: pointer">
                     <v-text-field
                     label="Create Post"
                     v-model="name"
@@ -11,6 +11,7 @@
                     prepend-icon="mdi-pencil"
                     dense
                     filled
+                    disabled
                     rounded
                     hide-details
                     type="text"
@@ -20,16 +21,48 @@
                 <v-avatar
                     color="primary"
                     size="50"
+                    style="color:white;"
                 >
-                    <img
-                        src="https://cdn.vuetifyjs.com/images/john.png"
-                        alt="John"
-                    >
+                    A
                 </v-avatar>
             </v-col>
         </v-row>
     </v-card-text>
 </v-card>
+<v-row>
+    <v-col>
+        <v-skeleton-loader
+        type="article, actions"
+        ></v-skeleton-loader>
+    </v-col>
+</v-row>
+<v-row>
+    <v-col>
+        <v-skeleton-loader
+        type="article, actions"
+        ></v-skeleton-loader>
+    </v-col>
+</v-row>
+<v-dialog
+    v-model="postdialog"
+    max-width="600px"
+>
+    <v-card>
+        <v-card-title>
+            <v-btn
+              icon
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+        </v-card-title>
+        <v-divider></v-divider>
+        <v-card-text>
+            <div>
+                
+            </div>
+        </v-card-text>
+    </v-card>
+</v-dialog>
 </div>
 </template>
 
@@ -38,6 +71,7 @@ export default {
     name:'Home',
     data: () => ({
       selectedItem: 0,
+      postdialog:false,
       name:null,
       items: [
         { text: 'My Files', icon: 'mdi-folder' },

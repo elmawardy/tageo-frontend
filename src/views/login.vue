@@ -62,7 +62,8 @@ export default {
                 email:this.email,
                 password:this.password
             }).then((response) => {
-                this.$store.commit('snackbar',{open:true,text:`Welcome ${response.data.user.name}`,color:'green lighten-1'})
+                this.$store.commit('snackbar',{open:true,text:`Welcome back ${response.data.user.name}`,color:'green lighten-1'})
+                this.$router.push({path:'/home'})
                 this.loading = false;
             }).catch((error) => {
                 if (error.response){

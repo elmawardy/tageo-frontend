@@ -24,7 +24,40 @@
         </v-row>
         <v-row class="mt-6">
             <v-col cols="3">
-                <h3>Trending <span><v-icon>mdi-trending-up</v-icon></span></h3>
+                <v-card
+                    color="#EEEEEE"
+                    elevation="0"
+                >
+                    <v-card-title class="text-h6 font-weight-bold">
+                    Trending <span><v-icon size="20">mdi-trending-up</v-icon></span>
+                    </v-card-title>
+
+                    <v-spacer></v-spacer>
+                    <v-skeleton-loader
+                    class="trending-skeleton"
+                    type="heading"
+                    ></v-skeleton-loader>
+                    <v-skeleton-loader
+                    class="trending-skeleton"                    
+                    type="heading"
+                    ></v-skeleton-loader>
+                    <v-skeleton-loader
+                    class="trending-skeleton"
+                    type="heading"
+                    ></v-skeleton-loader>
+                    <v-skeleton-loader
+                    class="trending-skeleton"
+                    type="heading"
+                    ></v-skeleton-loader>
+                    <v-skeleton-loader
+                    class="trending-skeleton"
+                    type="heading"
+                    ></v-skeleton-loader>
+
+                    <v-card-actions>
+                 
+                    </v-card-actions>
+                </v-card>
             </v-col>
             <v-col cols="6">
                 <router-view></router-view>
@@ -49,9 +82,17 @@
                     dense
                 >
                     <v-list-item-group
-                    v-model="selectedItem"
                     color="primary"
                     >
+                    <v-list-item>
+                        <v-list-item-icon>
+                        <v-icon>mdi-home</v-icon>
+                        </v-list-item-icon>
+
+                        <v-list-item-content>
+                        <v-list-item-title>Home</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
                     <v-list-item>
                         <v-list-item-icon>
                         <v-icon>mdi-pencil</v-icon>
@@ -98,17 +139,13 @@
 <script>
 export default {
     name:'Main',
-    data: () => ({
-      selectedItem: 0,
-      items: [
-        { text: 'My Files', icon: 'mdi-folder' },
-        { text: 'Shared with me', icon: 'mdi-account-multiple' },
-        { text: 'Starred', icon: 'mdi-star' },
-        { text: 'Recent', icon: 'mdi-history' },
-        { text: 'Offline', icon: 'mdi-check-circle' },
-        { text: 'Uploads', icon: 'mdi-upload' },
-        { text: 'Backups', icon: 'mdi-cloud-upload' },
-      ],
+    data: () => ({     
     }),
 }
 </script>
+
+<style scoped>
+.trending-skeleton{
+    padding:5px;
+}
+</style>
