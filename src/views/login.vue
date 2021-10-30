@@ -64,6 +64,10 @@ export default {
             }).then((response) => {
                 this.$store.commit('snackbar',{open:true,text:`Welcome back ${response.data.user.name}`,color:'green lighten-1'})
                 this.$router.push({path:'/home'})
+                
+                localStorage.jwt = response.data.Jwt
+                localStorage.userInfo = JSON.stringify(response.data.user)
+
                 this.loading = false;
             }).catch((error) => {
                 if (error.response){

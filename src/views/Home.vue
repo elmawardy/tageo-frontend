@@ -43,36 +43,36 @@
         ></v-skeleton-loader>
     </v-col>
 </v-row>
-<v-dialog
-    v-model="postdialog"
-    max-width="600px"
->
-    <v-card>
-        <v-card-title>
-            <v-btn
-              icon
-            >
-              <v-icon>mdi-close</v-icon>
-            </v-btn>
-        </v-card-title>
-        <v-divider></v-divider>
-        <v-card-text>
-            <div>
-                
-            </div>
-        </v-card-text>
-    </v-card>
-</v-dialog>
+<PostDialog :open="postdialog" />
 </div>
 </template>
 
 <script>
+const axios = require('axios').default;
+import PostDialog from '../components/postDialog.vue'
+
+
 export default {
     name:'Home',
+    components:{
+        PostDialog
+    },
+    methods:{
+        post:function(){
+            this.loading = true;
+            axios.post(`${this.$store.state.backendURL}/api/posts/add`,{
+                
+            })
+        },
+        TogglePostDialog:function (){
+            this.postdialog = !this.postdialog
+        }
+    },
     data: () => ({
       selectedItem: 0,
       postdialog:false,
       name:null,
+      loading:false,
       items: [
         { text: 'My Files', icon: 'mdi-folder' },
         { text: 'Shared with me', icon: 'mdi-account-multiple' },
