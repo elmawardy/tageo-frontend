@@ -12,6 +12,66 @@
             <div>
                 <editor-content :editor="editor" />
             </div>
+            <v-card class="mb-3" v-for="(poll,index) in polls" :key="'poll-'+index" style="position:relative;">
+                <v-card-title>
+                    Poll
+                </v-card-title>
+                <v-card-text>
+                    <h3>{{poll.text}}</h3>
+                    <ul>
+                        <li v-for="item,index in poll.items" :key="index">{{item.text}}</li>
+                    </ul>
+                </v-card-text>
+                 <v-btn
+                    fab
+                    small
+                    color="white"
+                    @click='polls.splice(index, 1)'
+                    style="position:absolute;top:5px;right:5px;"
+                    >
+                    <v-icon color="secondary">mdi-close</v-icon>
+                </v-btn>
+            </v-card>
+            <v-card class="mb-3" style="position:relative" v-for="(item,index) in progresses" :key="'progress-'+index" >
+                <v-card-title>
+                    Progress
+                </v-card-title>
+                <v-card-text>
+                    <h3>{{item.title}}</h3>
+                    <v-progress-linear
+                        :value="item.percent"
+                        height="25"
+                        >
+                        <strong style="color:white;">{{ item.current }}/{{ item.end }} ({{item.percent}}%)</strong>
+                    </v-progress-linear>
+                </v-card-text>
+                <v-btn
+                    fab
+                    small
+                    color="white"
+                    @click='progresses.splice(index, 1)'
+                    style="position:absolute;top:5px;right:5px;"
+                    >
+                    <v-icon color="secondary">mdi-close</v-icon>
+                </v-btn>
+            </v-card>
+             <v-card class="mb-3" v-for="(location,index) in locations" :key="'location-'+index" style="position:relative;">
+                <v-card-title>
+                    Location
+                </v-card-title>
+                <v-card-text>
+                    [{{location[0]}},{{location[1]}}]
+                </v-card-text>
+                 <v-btn
+                    fab
+                    small
+                    color="white"
+                    @click='locations.splice(index, 1)'
+                    style="position:absolute;top:5px;right:5px;"
+                    >
+                    <v-icon color="secondary">mdi-close</v-icon>
+                </v-btn>
+            </v-card>
             <div style="position:relative" v-for="(item,index) in media" :key="index" >
                 <v-btn
                     fab
@@ -29,16 +89,24 @@
                 <v-card-text>
                     <v-tooltip top>
                         <template v-slot:activator="{ on, attrs }">
-                            <v-btn
-                            color="primary"
-                            dark
-                            v-bind="attrs"
-                            v-on="on"
-                            icon
-                            @click="$emit('showPanel','location')"
+                            <v-badge
+                                bordered
+                                color="secondary"
+                                :content="locations.length"
+                                overlap
+                                :value="locations.length>0"
                             >
-                                <v-icon>mdi-earth</v-icon>
-                            </v-btn>
+                                <v-btn
+                                color="primary"
+                                dark
+                                v-bind="attrs"
+                                v-on="on"
+                                icon
+                                @click="$emit('showPanel','location')"
+                                >
+                                    <v-icon>mdi-earth</v-icon>
+                                </v-btn>
+                            </v-badge>
                         </template>
                         <span>Location</span>
                     </v-tooltip>
@@ -67,29 +135,47 @@
                     </v-tooltip>
                     <v-tooltip top>
                         <template v-slot:activator="{ on, attrs }">
-                            <v-btn
-                            color="primary"
-                            dark
-                            v-bind="attrs"
-                            v-on="on"
-                            icon
+                            <v-badge
+                                bordered
+                                color="secondary"
+                                :content="polls.length"
+                                overlap
+                                :value="polls.length>0"
                             >
-                                <v-icon>mdi-poll</v-icon>
-                            </v-btn>
+                                <v-btn
+                                color="primary"
+                                dark
+                                v-bind="attrs"
+                                v-on="on"
+                                @click="$emit('showPanel','poll')"
+                                icon
+                                >
+                                    <v-icon>mdi-poll</v-icon>
+                                </v-btn>
+                            </v-badge>
                         </template>
                         <span>Poll</span>
                     </v-tooltip>
                     <v-tooltip top>
                         <template v-slot:activator="{ on, attrs }">
-                            <v-btn
-                            color="primary"
-                            dark
-                            v-bind="attrs"
-                            v-on="on"
-                            icon
+                             <v-badge
+                                bordered
+                                color="secondary"
+                                :content="progresses.length"
+                                :value="progresses.length"
+                                overlap
                             >
-                                <v-icon>mdi-progress-check</v-icon>
-                            </v-btn>
+                                <v-btn
+                                color="primary"
+                                dark
+                                v-bind="attrs"
+                                @click="$emit('showPanel','progress')"
+                                v-on="on"
+                                icon
+                                >
+                                    <v-icon>mdi-progress-check</v-icon>
+                                </v-btn>
+                             </v-badge>
                         </template>
                         <span>Progress</span>
                     </v-tooltip>
@@ -116,6 +202,7 @@ export default {
     components: {
         EditorContent,
     },
+    props:['polls','progresses','locations'],
     data() {
         return {
             editor:null,
