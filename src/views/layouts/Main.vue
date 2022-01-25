@@ -13,7 +13,7 @@
                     </v-btn>
 
                     <v-btn icon>
-                        <v-icon>mdi-heart</v-icon>
+                        <v-icon>mdi-bell</v-icon>
                     </v-btn>
 
                     <v-btn icon>

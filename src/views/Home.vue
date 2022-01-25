@@ -43,7 +43,7 @@
         ></v-skeleton-loader>
     </v-col>
 </v-row>
-<PostDialog :open="postdialog" />
+<PostDialog @closeDialog="postdialog=false" :open="postdialog" />
 </div>
 </template>
 

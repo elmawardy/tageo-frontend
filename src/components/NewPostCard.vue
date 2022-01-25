@@ -3,13 +3,28 @@
         <v-card-title>
             <v-btn
             icon
+            @click="$emit('closeDialog')"
             >
             <v-icon>mdi-close</v-icon>
             </v-btn>
         </v-card-title>
         <v-divider></v-divider>
-        <v-card-text class="pa-2">
+        <v-card-text class="pa-2" justify="center">
             <div>
+                <div v-if="editor">
+                    <button @click="editor.chain().focus().setTextAlign('left').run()" :class="{ 'is-active': editor.isActive({ textAlign: 'left' }) }">
+                        left
+                    </button>
+                    <button @click="editor.chain().focus().setTextAlign('center').run()" :class="{ 'is-active': editor.isActive({ textAlign: 'center' }) }">
+                        center
+                    </button>
+                    <button @click="editor.chain().focus().setTextAlign('right').run()" :class="{ 'is-active': editor.isActive({ textAlign: 'right' }) }">
+                        right
+                    </button>
+                    <button @click="editor.chain().focus().setTextAlign('justify').run()" :class="{ 'is-active': editor.isActive({ textAlign: 'justify' }) }">
+                        justify
+                    </button>
+                </div>
                 <editor-content :editor="editor" />
             </div>
             <v-card class="mb-3" v-for="(poll,index) in polls" :key="'poll-'+index" style="position:relative;">
@@ -78,7 +93,7 @@
                     small
                     color="white"
                     background-color="red"
-                    @click="media.splice(index, 1)"
+                    @click="$emit('removeMedia',index)"
                     style="position:absolute;top:5px;right:5px;"
                     >
                     <v-icon color="secondary">mdi-close</v-icon>
@@ -184,47 +199,90 @@
             <div class="mt-2">
                 <v-btn
                 color="primary"
+                @click="$emit('publish')"
                 depressed
                 block
                 >Publish</v-btn>
             </div>
+            <v-overlay
+            :absolute="false"
+            :value="isPosting"
+            :color="'#CCCCCC'"
+            >
+                <div style="min-width:20vw;text-align:center;background-color:white;padding:5px;border-radius:10px;">
+                    <div style="display:flex;justify-content: center;padding-top:5px;">
+                        <v-progress-circular
+                        indeterminate
+                        color="primary"
+                        :size="15"
+                        :width="2"
+                        style="margin-top:3px;"
+                        ></v-progress-circular>
+                        <p style="margin-left:5px;font-size:12px;color:black">{{uploadingProgressText}}</p>
+                    </div>
+                    <v-btn
+                    style="margin-bottom:5px;"
+                    color="warning"
+                    small
+                    >
+                        Cancel
+                    </v-btn>
+                </div>
+            </v-overlay>
         </v-card-text>
         <input ref="file_input" type='file' @change="addFile();" style="display:none" />
     </v-card>
 </template>
 
 <script>
+const axios = require('axios').default;
 import {  Editor,EditorContent } from '@tiptap/vue-2'
 import StarterKit from '@tiptap/starter-kit'
+import TextAlign from '@tiptap/extension-text-align'
 
 export default {
     name: 'NewPostCard',
     components: {
         EditorContent,
     },
-    props:['polls','progresses','locations'],
+    props:['polls','progresses','locations','media','isPosting','uploadingProgressText'],
     data() {
         return {
             editor:null,
-            media:[]
         }
     },
     methods:{
       addFile:function (){
           console.log(this.$refs.file_input.files[0])
           if (this.$refs.file_input.files[0].type.split('/')[0] == "image")
-            this.media.push({type:'image',url:URL.createObjectURL(this.$refs.file_input.files[0])})
+            this.$emit("addMedia",{type:'image',url:URL.createObjectURL(this.$refs.file_input.files[0]),file:this.$refs.file_input.files[0]})
           else
             this.$store.commit('snackbar',{open:true,text:`Unsupported media type`,color:'pink lighten-1'})
+      },
+      publish: function(){
+          axios.post(`${this.$store.state.backendURL}/api/posts/add`,{
+                headers: {
+                    'Authorization': 'Bearer '+localStorage.jwt
+                },
+                article: this.editor,
+                hashtags: [],
+                locations: this.locations,
+                polls: this.polls,
+                progresses: this.progresses
+          })
       }  
     },
     mounted() {
         this.editor = new Editor({
-        content: '',
+            content: '',
             extensions: [
                 StarterKit,
+                TextAlign.configure({
+                    types: ['heading', 'paragraph'],
+                }),
             ],
             autofocus: true,
+            editable: true,
         })
     },
     beforeDestroy() {
