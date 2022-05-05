@@ -6,7 +6,7 @@
         >
             <v-slide-x-transition mode="out-in">
                 <keep-alive>
-                    <NewPostCard :uploadingProgressText="uploadingProgressText" @closeDialog="$emit('closeDialog')" :isPosting="isPosting" @publish="publish" :media="media" @addMedia="addMedia" @removeMedia="removeMedia" :progresses="progresses" :polls="polls" :locations="locations" @showPanel="showPanel" v-if="panels.post" key="2"/>
+                    <NewPostCard @articleChange="articleChange" :uploadingProgressText="uploadingProgressText" @closeDialog="$emit('closeDialog')" :isPosting="isPosting" @publish="publish" :media="media" @addMedia="addMedia" @removeMedia="removeMedia" :progresses="progresses" :polls="polls" :locations="locations" @showPanel="showPanel" v-if="panels.post" key="2"/>
                     <PostLocation @removeLocation="removeLocation" @returnLocation="addLocation" @showPanel="showPanel" v-if="panels.location" key="1" />
                     <Poll @returnPoll="addPoll" @showPanel="showPanel" v-if="panels.poll" key="3"/>
                     <PostProgress @returnProgress="addProgress" @showPanel="showPanel" v-if="panels.progress" key="4"/>
@@ -40,6 +40,7 @@ export default {
                 poll:false,
                 progress:false
             },
+            article:"",
             locations:[],
             polls:[],
             progresses:[],
@@ -53,7 +54,7 @@ export default {
             this.isPosting = true;
             this.uploadingProgressText = `Processing ...`
             axios.post(`${this.$store.state.backendURL}/api/posts/add`,{
-                article:"",
+                article:this.article,
                 locations:this.locations,
                 hashtags:[],
                 groups:[],
@@ -73,6 +74,7 @@ export default {
                             color: 'green'
                         })
                         this.isPosting = false
+                        this.$emit('closeDialog')
                     })
                 }
             }).catch((error) => {
@@ -83,6 +85,9 @@ export default {
                 }
                 this.isPosting = false
             })
+        },
+        articleChange(html){
+            this.article = html
         },
         uploadMedia(post_id){
             return new Promise((resolve,reject) => {

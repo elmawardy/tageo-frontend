@@ -29,20 +29,30 @@
         </v-row>
     </v-card-text>
 </v-card>
-<v-row>
-    <v-col>
-        <v-skeleton-loader
-        type="article, actions"
-        ></v-skeleton-loader>
-    </v-col>
-</v-row>
-<v-row>
-    <v-col>
-        <v-skeleton-loader
-        type="article, actions"
-        ></v-skeleton-loader>
-    </v-col>
-</v-row>
+<div v-if="loading">
+    <v-row>
+        <v-col>
+            <v-skeleton-loader
+            type="article, actions"
+            ></v-skeleton-loader>
+        </v-col>
+    </v-row>
+    <v-row>
+        <v-col>
+            <v-skeleton-loader
+            type="article, actions"
+            ></v-skeleton-loader>
+        </v-col>
+    </v-row>
+</div>
+<div v-else>
+    <v-row v-for="(post,key) in posts" :key="key">
+        <v-col>
+            <Post :post="post" />
+        </v-col>
+    </v-row>
+</div>
+
 <PostDialog @closeDialog="postdialog=false" :open="postdialog" />
 </div>
 </template>
@@ -50,12 +60,14 @@
 <script>
 const axios = require('axios').default;
 import PostDialog from '../components/postDialog.vue'
+import Post from '../components/Post.vue'
 
 
 export default {
     name:'Home',
     components:{
-        PostDialog
+        PostDialog,
+        Post
     },
     methods:{
         post:function(){
@@ -68,11 +80,40 @@ export default {
             this.postdialog = !this.postdialog
         }
     },
+    mounted() {
+        axios.post(`${this.$store.state.backendURL}/graphql`,{
+            query : `
+            {
+                posts {
+                    _id
+                    article
+                    hashtags
+                    publish_date
+                    media {
+                        url
+                        type
+                        comment
+                    }
+                    locations {
+                        coords
+                    }
+                    author {
+                        name
+                    }
+                }
+            }`
+        })
+        .then((response) => {
+            this.loading = false
+            this.posts = response.data.data.posts
+        })
+    },
     data: () => ({
       selectedItem: 0,
       postdialog:false,
       name:null,
-      loading:false,
+      loading:true,
+      posts:[],
       items: [
         { text: 'My Files', icon: 'mdi-folder' },
         { text: 'Shared with me', icon: 'mdi-account-multiple' },

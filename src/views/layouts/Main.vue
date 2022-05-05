@@ -2,7 +2,7 @@
     <v-container fluid>
         <v-row>
             <v-col class="pa-0">
-                <v-toolbar dense class="elevation-3" flat>
+                <v-app-bar dense elevate-on-scroll fixed>
 
                     <v-toolbar-title>Tageo</v-toolbar-title>
 
@@ -19,10 +19,10 @@
                     <v-btn icon>
                         <v-icon>mdi-dots-vertical</v-icon>
                     </v-btn>
-                </v-toolbar>
+                </v-app-bar>
             </v-col>
         </v-row>
-        <v-row class="mt-6">
+        <v-row class="mt-10 pt-6">
             <v-col cols="3">
                 <v-card
                     color="#EEEEEE"
@@ -84,15 +84,21 @@
                     <v-list-item-group
                     color="primary"
                     >
-                    <v-list-item>
-                        <v-list-item-icon>
-                        <v-icon>mdi-home</v-icon>
-                        </v-list-item-icon>
+                    <router-link
+                        to="home"
+                        style="text-decoration: none; color: inherit;"
+                        custom
+                    >
+                        <v-list-item>
+                            <v-list-item-icon>
+                            <v-icon>mdi-home</v-icon>
+                            </v-list-item-icon>
 
-                        <v-list-item-content>
-                        <v-list-item-title>Home</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
+                            <v-list-item-content>
+                            <v-list-item-title>Home</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </router-link>
                     <v-list-item>
                         <v-list-item-icon>
                         <v-icon>mdi-pencil</v-icon>
@@ -102,18 +108,24 @@
                         <v-list-item-title>My Posts</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
-                    <v-list-item>
-                        <v-list-item-icon>
-                        <v-icon>mdi-account-group</v-icon>
-                        </v-list-item-icon>
+                    <router-link
+                        style="text-decoration: none; color: inherit;"
+                        to="groups"
+                        custom
+                    >
+                        <v-list-item>
+                            <v-list-item-icon>
+                            <v-icon>mdi-account-group</v-icon>
+                            </v-list-item-icon>
 
-                        <v-list-item-content>
-                        <v-list-item-title>My Groups</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
+                            <v-list-item-content>
+                            <v-list-item-title>Groups</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </router-link>
                     <v-list-item>
                         <v-list-item-icon>
-                        <v-icon>mdi-content-save</v-icon>
+                        <v-icon>mdi-bookmark-outline</v-icon>
                         </v-list-item-icon>
 
                         <v-list-item-content>

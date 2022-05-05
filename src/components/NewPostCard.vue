@@ -10,22 +10,25 @@
         </v-card-title>
         <v-divider></v-divider>
         <v-card-text class="pa-2" justify="center">
-            <div>
-                <div v-if="editor">
-                    <button @click="editor.chain().focus().setTextAlign('left').run()" :class="{ 'is-active': editor.isActive({ textAlign: 'left' }) }">
-                        left
-                    </button>
-                    <button @click="editor.chain().focus().setTextAlign('center').run()" :class="{ 'is-active': editor.isActive({ textAlign: 'center' }) }">
-                        center
-                    </button>
-                    <button @click="editor.chain().focus().setTextAlign('right').run()" :class="{ 'is-active': editor.isActive({ textAlign: 'right' }) }">
-                        right
-                    </button>
-                    <button @click="editor.chain().focus().setTextAlign('justify').run()" :class="{ 'is-active': editor.isActive({ textAlign: 'justify' }) }">
-                        justify
-                    </button>
-                </div>
-                <editor-content :editor="editor" />
+            <div class="pb-5">
+                <editor
+                v-model="article"
+                api-key=""
+                :init="{
+                    height: '50vh',
+                    menubar: false,
+                    plugins: [
+                    'advlist autolink lists link image charmap print preview anchor',
+                    'searchreplace visualblocks code fullscreen',
+                    'insertdatetime media table paste code help wordcount'
+                    ],
+                    toolbar:
+                    'undo redo | formatselect | bold italic backcolor | \
+                    alignleft aligncenter alignright alignjustify | \
+                    bullist numlist outdent indent lineheight | removeformat | help',
+                    lineheight_formats: '0.5 1 1.1 1.2 1.3 1.4 1.5 2'
+                }"
+                />
             </div>
             <v-card class="mb-3" v-for="(poll,index) in polls" :key="'poll-'+index" style="position:relative;">
                 <v-card-title>
@@ -236,19 +239,17 @@
 
 <script>
 const axios = require('axios').default;
-import {  Editor,EditorContent } from '@tiptap/vue-2'
-import StarterKit from '@tiptap/starter-kit'
-import TextAlign from '@tiptap/extension-text-align'
+import Editor from '@tinymce/tinymce-vue'
 
 export default {
     name: 'NewPostCard',
     components: {
-        EditorContent,
+        'editor': Editor
     },
     props:['polls','progresses','locations','media','isPosting','uploadingProgressText'],
     data() {
         return {
-            editor:null,
+            article: ""
         }
     },
     methods:{
@@ -265,45 +266,19 @@ export default {
                     'Authorization': 'Bearer '+localStorage.jwt
                 },
                 article: this.editor,
-                hashtags: [],
                 locations: this.locations,
                 polls: this.polls,
                 progresses: this.progresses
           })
       }  
     },
-    mounted() {
-        this.editor = new Editor({
-            content: '',
-            extensions: [
-                StarterKit,
-                TextAlign.configure({
-                    types: ['heading', 'paragraph'],
-                }),
-            ],
-            autofocus: true,
-            editable: true,
-        })
-    },
     beforeDestroy() {
-        this.editor.destroy()
+    
     },
+    watch:{
+        article(after){
+            this.$emit('articleChange',after)
+        }
+    }
 }
 </script>
-
-
-<style lang="scss">
-.ProseMirror {
-  min-height: 40vh;
-  > * + * {
-    margin-top: 0.75em;
-  }
-  p {
-      margin:0px;
-  }
-}
-
-.ProseMirror:focus {
-    outline: none;
-}
-</style>

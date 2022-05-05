@@ -5,7 +5,7 @@ import Register from '../views/register'
 import VerifyUser from '../views/VerifyUser'
 import Home from '../views/Home'
 import Main from '../views/layouts/Main'
-import MyGroups from '../views/MyGroups'
+import Groups from '../views/Groups'
 
 Vue.use(VueRouter)
 
@@ -34,7 +34,7 @@ const routes = [
       component: Main,
       children: [
         {path:'home',component: Home,alias:['/']},
-        {path:'mygroups',component: MyGroups},
+        {path:'groups',component: Groups},
       ]
     }
   ]

@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import VueLazyLoad from 'vue-lazyload'
 
 Vue.use(Vuex)
+Vue.use(VueLazyLoad)
 
 export default new Vuex.Store({
   state: {
