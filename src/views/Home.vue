@@ -89,6 +89,15 @@ export default {
                     article
                     hashtags
                     publish_date
+                    comments {
+                        _id
+                        user_id
+                        content
+                        comments {
+                            user_id
+                            content
+                        }
+                    }
                     media {
                         url
                         type
