@@ -96,6 +96,12 @@ export default {
                         comments {
                             user_id
                             content
+                            author {
+                                name
+                            }
+                        }
+                        author {
+                            name
                         }
                     }
                     media {

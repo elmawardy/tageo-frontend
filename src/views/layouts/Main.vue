@@ -8,13 +8,94 @@
 
                     <v-spacer></v-spacer>
 
-                    <v-btn icon>
-                        <v-icon>mdi-magnify</v-icon>
-                    </v-btn>
+                    <v-text-field
+                        style="margin-top:25px;"
+                        label="Search (Press /)"
+                        prepend-inner-icon="mdi-magnify"
+                        solo
+                        dense
+                        flat
+                    ></v-text-field>
 
-                    <v-btn icon>
-                        <v-icon>mdi-bell</v-icon>
-                    </v-btn>
+                    <v-spacer></v-spacer>
+                    
+                    <v-menu
+                        v-model="open_notifications"
+                        :close-on-content-click="false"
+                        :nudge-width="200"
+                        offset-x
+                    >
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-badge
+                                :content="$store.state.notifications.length"
+                                :value="$store.state.notifications.length>0"
+                                color="red"
+                                overlap
+                                bordered
+                                offset-x="20"
+                                offset-y="22"
+                            >
+                                <v-btn 
+                                    icon
+                                    v-bind="attrs"
+                                    v-on="on"
+                                >
+                                    <v-icon>mdi-bell</v-icon>
+                                </v-btn>
+                            </v-badge>
+                        </template>
+
+                        <v-card>
+                            <v-list>
+                            <v-list-item>
+                                <v-list-item-content>
+                                    <v-list-item-title>Notifications</v-list-item-title>
+                                </v-list-item-content>
+
+                                <v-list-item-action>
+                                    <v-btn
+                                        icon
+                                    >
+                                        <v-icon>mdi-bell-off-outline</v-icon>
+                                    </v-btn>
+                                </v-list-item-action>
+                            </v-list-item>
+                            </v-list>
+
+                            <v-divider></v-divider>
+
+                            <v-list>
+                                <v-list-item v-for="(n,key) in $store.state.notifications" :key="key">
+                                    <v-list-item-avatar>
+                                        <v-icon>mdi-check</v-icon>
+                                    </v-list-item-avatar>
+                                    <v-list-item-content>
+                                        {{n.content}}
+                                    </v-list-item-content>
+                                </v-list-item>
+                            </v-list>
+
+                            <v-card-actions>
+                            <v-spacer></v-spacer>
+
+                            <v-btn
+                                text
+                                @click="menu = false"
+                            >
+                                Close
+                            </v-btn>
+                            <v-btn
+                                color="primary"
+                                text
+                                @click="menu = false"
+                            >
+                                Clear
+                            </v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-menu>
+
+                    <Notifications />
 
                     <v-btn icon>
                         <v-icon>mdi-dots-vertical</v-icon>
@@ -64,17 +145,19 @@
             </v-col>
             <v-col cols="3">
                 <v-list>
-                    <v-list-item link>
-                    <v-list-item-content>
-                        <v-list-item-title class="text-h6">
-                        John Leider
-                        </v-list-item-title>
-                    </v-list-item-content>
+                    <router-link style="text-decoration: none;" :to="`/u/${user_info.id}`">
+                        <v-list-item link>
+                            <v-list-item-content>
+                                    <v-list-item-title class="text-h6">
+                                            {{user_info ? user_info.name : "..."}}
+                                    </v-list-item-title>
+                            </v-list-item-content>
 
-                    <v-list-item-action>
-                        <v-icon>mdi-arrow-right</v-icon>
-                    </v-list-item-action>
-                    </v-list-item>
+                            <v-list-item-action>
+                                <v-icon>mdi-arrow-right</v-icon>
+                            </v-list-item-action>
+                        </v-list-item>
+                    </router-link>
                 </v-list>
                 <v-divider></v-divider>
                 <v-list
@@ -85,7 +168,7 @@
                     color="primary"
                     >
                     <router-link
-                        to="home"
+                        to="/"
                         style="text-decoration: none; color: inherit;"
                         custom
                     >
@@ -99,15 +182,6 @@
                             </v-list-item-content>
                         </v-list-item>
                     </router-link>
-                    <v-list-item>
-                        <v-list-item-icon>
-                        <v-icon>mdi-pencil</v-icon>
-                        </v-list-item-icon>
-
-                        <v-list-item-content>
-                        <v-list-item-title>My Posts</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
                     <router-link
                         style="text-decoration: none; color: inherit;"
                         to="groups"
@@ -129,16 +203,7 @@
                         </v-list-item-icon>
 
                         <v-list-item-content>
-                        <v-list-item-title>Saved Posts</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-                    <v-list-item>
-                        <v-list-item-icon>
-                        <v-icon>mdi-account</v-icon>
-                        </v-list-item-icon>
-
-                        <v-list-item-content>
-                        <v-list-item-title>My Profile</v-list-item-title>
+                        <v-list-item-title>Saved</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
                     </v-list-item-group>
@@ -149,10 +214,21 @@
 </template>
 
 <script>
+import Notifications from '@/components/Notifications.vue';
+
+
 export default {
     name:'Main',
-    data: () => ({     
+    components: {
+        Notifications
+    },
+    data: () => ({    
+        open_notifications:false,
+        user_info:null
     }),
+    mounted() {
+        this.user_info = JSON.parse(localStorage.userInfo)
+    },
 }
 </script>
 

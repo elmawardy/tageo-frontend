@@ -6,6 +6,8 @@ import VerifyUser from '../views/VerifyUser'
 import Home from '../views/Home'
 import Main from '../views/layouts/Main'
 import Groups from '../views/Groups'
+import Profile from '../views/Profile'
+import PostPage from '../components/PostPage'
 
 Vue.use(VueRouter)
 
@@ -35,6 +37,8 @@ const routes = [
       children: [
         {path:'home',component: Home,alias:['/']},
         {path:'groups',component: Groups},
+        {path:'post/:id',component: PostPage},
+        {path:'u/:id',component: Profile},
       ]
     }
   ]

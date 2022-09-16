@@ -68,13 +68,9 @@ export default {
                 if (response.status == 200){
                     this.uploadMedia(response.data.data.post_id)
                     .then(() => {
-                            this.$store.commit('snackbar',{
-                            open:true,
-                            text:'Post published successfully',
-                            color: 'green'
-                        })
                         this.isPosting = false
                         this.$emit('closeDialog')
+                        this.$store.commit('add_notification',{open:true,type:'message_with_link',content:'Your post has been submitted successfully!',level:'success',link:`/post/${response.data.data.post_id}`})
                     })
                 }
             }).catch((error) => {

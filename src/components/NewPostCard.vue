@@ -13,7 +13,7 @@
             <div class="pb-5">
                 <editor
                 v-model="article"
-                api-key=""
+                api-key="vziuotwvmas2erqj49kvn9vfl7ta1msilvcrbansidlgrgdg"
                 :init="{
                     height: '50vh',
                     menubar: false,
