@@ -1,24 +1,34 @@
 <template>
     <v-container>
-        <v-row>
+        <v-card class="mx-auto"  tile>
+            <v-img height="100%" src="https://cdn.vuetifyjs.com/images/cards/server-room.jpg"></v-img>
             <v-col>
-                <div style="display:flex;direction:row">
-                    <v-avatar
-                    color="primary"
-                    size="56"
-                    style="color:white;"
-                    >{{user_info ? user_info.name[0] : ""}}</v-avatar>
-                    <div style="position:relative">
-                        <div class="font-weight-medium px-2" style="bottom:5px;position:absolute;">{{user_info ? user_info.name : ""}}</div>
-                    </div>
+                <v-avatar size="100" style="position:absolute; top: 130px">
+                    <v-img src="https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"></v-img>
+                </v-avatar>
+            </v-col>
+            <v-list-item color="rgba(0, 0, 0, .4)">
+            <v-list-item-content>
+                <v-list-item-title class="title">{{user_info ? user_info.name : ""}}</v-list-item-title>
+                <v-list-item-subtitle v-if="user_info">Profile</v-list-item-subtitle>
+                <v-list-item-subtitle v-else>
                     <v-skeleton-loader
-                        v-if="!user_info"
                         type="list-item-avatar"
                     ></v-skeleton-loader>
-                </div>
-            </v-col>
-        </v-row>
-        <v-row>
+                </v-list-item-subtitle>
+            </v-list-item-content>
+            </v-list-item>
+            <v-btn
+              fab
+              small
+              color="white"
+              depressed
+              style="position:absolute;right:10px;top:10px;"
+            >
+              <v-icon>mdi-pencil</v-icon>
+            </v-btn>
+        </v-card>
+        <v-row class="mt-1">
             <v-col>
                 <div v-if="loadingPosts">
                     <v-row>
