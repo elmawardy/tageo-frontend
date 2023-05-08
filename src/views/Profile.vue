@@ -341,6 +341,7 @@ export default {
                             }
                             author{
                                 name
+                                _id
                             }
                         }
                         media {
@@ -353,6 +354,7 @@ export default {
                         }
                         author {
                             name
+                            _id
                         }
                     }
                 }`
