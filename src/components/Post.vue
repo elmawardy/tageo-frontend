@@ -3,7 +3,7 @@
         <v-card-text>
             <v-row>
                 <v-col @click="postBodyClick()" style="cursor:pointer;" cols="12">
-                    <p style="font-size:0.8rem">Posted by <a href="http://google.com" style="text-decoration: none">{{post.author.name}}</a> {{post.publish_date}}</p>
+                    <p style="font-size:0.8rem">Posted by <a @click.stop="" :href="'/u/'+post.author._id" style="text-decoration: none">{{post.author.name}}</a> {{post.publish_date}}</p>
 
                     <p style="color:#5D5D5E" v-html="post.article"></p>  
                 </v-col>

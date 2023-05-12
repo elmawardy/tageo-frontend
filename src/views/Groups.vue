@@ -3,7 +3,7 @@
     <h2>Groups</h2>
     <div style="display:flex;flex-direction:column" class="mt-5">
         <v-text-field
-            label="All groups"
+            label="Search groups"
             prepend-inner-icon="mdi-magnify"
             solo
         ></v-text-field>
