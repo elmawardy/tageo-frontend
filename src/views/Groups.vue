@@ -8,9 +8,15 @@
             solo
         ></v-text-field>
         <div style="display: flex;justify-content: flex-end;">
-            <v-btn color="success">
-                Create group
-            </v-btn>
+            <router-link
+                style="text-decoration: none; color: inherit;"
+                to="groupcreate"
+                custom
+            >
+                <v-btn color="success">
+                    Create group
+                </v-btn>
+            </router-link>
         </div>
     </div>
     <v-list

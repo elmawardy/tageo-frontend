@@ -6,6 +6,7 @@ import VerifyUser from '../views/VerifyUser'
 import Home from '../views/Home'
 import Main from '../views/layouts/Main'
 import Groups from '../views/Groups'
+import GroupCreate from '../views/GroupCreate'
 import Profile from '../views/Profile'
 import PostPage from '../components/PostPage'
 
@@ -39,6 +40,7 @@ const routes = [
         {path:'groups',component: Groups},
         {path:'post/:id',component: PostPage},
         {path:'u/:id',component: Profile},
+        {path:'groupcreate',component: GroupCreate},
       ]
     }
   ]
