@@ -3,9 +3,11 @@
         <h2>Create Group</h2>
         <v-text-field
             label="Group name"
+            v-model="name"
         ></v-text-field>
         <v-text-field
             label="Description"
+            v-model="description"
         ></v-text-field>
 
         <h5>Group Image</h5>
@@ -29,10 +31,18 @@
         </v-container>
         <input ref="mainpic_input" type='file' @change="changeMainPicPlaceholder();" style="display:none" />
         <input ref="background_input" type='file' @change="changeBackgroundPlaceholder();" style="display:none" />
+
+        <div style="display: flex; flex;justify-content: flex-end;">
+            <v-btn color="success" @click="createGroup">
+                Create group
+            </v-btn>
+        </div>
     </div>
 </template>
 
 <script>
+const axios = require('axios').default;
+
 export default {
     data() {
         return {
@@ -58,6 +68,28 @@ export default {
             else
                 this.$store.commit('snackbar',{open:true,text:`Unsupported media type`,color:'pink lighten-1'})
         },
+        createGroup: function(){
+            axios.post(`${this.$store.state.backendURL}/api/groups/create`,{
+                name:this.name,
+                description:this.description
+            },
+            {
+                headers: {
+                    'Authorization': 'Bearer '+localStorage.jwt
+                },
+            }).then(() => {
+                this.$store.commit('snackbar',{open:true,text:`Done creating group`,color:'green lighten-1'})
+                this.loading = false;
+            }).catch((error) => {
+                if (error.response){
+                    this.$store.commit('snackbar',{open:true,text:error.response.data.message})
+                    this.loading = false;
+                }else{
+                    this.$store.commit('snackbar',{open:true,text:"Error"})
+                    this.loading = false;
+                }
+            })   
+        }
     },
 }
 </script>
